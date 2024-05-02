@@ -1,0 +1,12 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block main %}
+
+    <h1>Dashboard</h1>
+   {% for farmer in farmers %}
+   <h2>{{ farmer.lastname }}</h2>
+   <h2>{{ farmer.firstname }}</h2>
+   <h3>{{ farmer.adress }}</h3>
+   {% endfor %}   
+
+{% endblock %}

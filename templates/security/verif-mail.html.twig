@@ -1,0 +1,21 @@
+{% extends 'base.html.twig'%}
+
+{% block title %}Vérification du mail{% endblock %}
+
+{% block body %}
+<div class="flex justify-center">
+    <div class="flex flex-col">
+        <div class="flex justify-center">
+            <h1>Vérification du mail</h1>
+        </div>
+        <div>
+            {% for message in app.flashes('warning') %}
+                <div class="flash-notice">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
