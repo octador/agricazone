@@ -4,7 +4,9 @@ namespace App\Controller;
 
  // Assurez-vous d'importer la classe User si ce n'est pas déjà fait
 
+use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
+use App\Repository\StockRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response; 
@@ -12,8 +14,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'home')]
-    public function index(Security $security, ProductRepository $productRepository): Response
+
+    #[Route('/{category?}', name: 'home')]
+
+    public function index(Security $security, ProductRepository $productRepository, ?string $category,CategoryRepository $categoryRepository,StockRepository $stockRepository): Response
     {
         $user = $this->getUser();
 
@@ -24,11 +28,28 @@ class HomeController extends AbstractController
             $security->logout(false);
             return $this->redirectToRoute('verification_page');
         }
+
+        $categories = $categoryRepository->findAll();
+
         
-        $fullProducts = $productRepository->findAll();
+        $products = null;
+        if($category) {
+            $findCategory = $categoryRepository->findOneBy([
+                'name' => $category
+            ]);
+            $products = $productRepository->findBy([
+                'category' => $findCategory->getId()
+            ]);
+
+        } 
+
+      
         
+       
+
         return $this->render('home/index.html.twig', [
-            'fullProducts' => $fullProducts
+            'products' => $products, 
+            'categories' => $categories
         ]);
     }
 

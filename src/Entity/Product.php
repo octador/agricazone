@@ -25,8 +25,6 @@ class Product
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $picture = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $category = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $is_aivailable = null;
@@ -36,6 +34,9 @@ class Product
 
     #[ORM\ManyToOne(inversedBy: 'product')]
     private ?Stock $stock = null;
+
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Category $category = null;
 
     public function getId(): ?int
     {
@@ -90,17 +91,6 @@ class Product
         return $this;
     }
 
-    public function getCategory(): ?string
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?string $category): static
-    {
-        $this->category = $category;
-
-        return $this;
-    }
 
     public function isAivailable(): ?bool
     {
@@ -134,6 +124,18 @@ class Product
     public function setStock(?Stock $stock): static
     {
         $this->stock = $stock;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }
