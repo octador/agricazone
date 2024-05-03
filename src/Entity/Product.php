@@ -32,8 +32,6 @@ class Product
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\ManyToOne(inversedBy: 'product')]
-    private ?Stock $stock = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Category $category = null;
@@ -116,17 +114,6 @@ class Product
         return $this;
     }
 
-    public function getStock(): ?Stock
-    {
-        return $this->stock;
-    }
-
-    public function setStock(?Stock $stock): static
-    {
-        $this->stock = $stock;
-
-        return $this;
-    }
 
     public function getCategory(): ?Category
     {
@@ -139,4 +126,6 @@ class Product
 
         return $this;
     }
+
+    
 }

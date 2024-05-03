@@ -18,11 +18,8 @@ class Stock
     #[ORM\ManyToOne(inversedBy: 'stocks')]
     private ?User $user = null;
 
-    /**
-     * @var Collection<int, Product>
-     */
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'stock')]
-    private Collection $product;
+  
+    
 
     #[ORM\Column(nullable: true)]
     private ?int $quantity = null;
@@ -32,7 +29,6 @@ class Stock
 
     public function __construct()
     {
-        $this->product = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -52,36 +48,7 @@ class Stock
         return $this;
     }
 
-    /**
-     * @return Collection<int, Product>
-     */
-    public function getProduct(): Collection
-    {
-        return $this->product;
-    }
-
-    public function addProduct(Product $product): static
-    {
-        if (!$this->product->contains($product)) {
-            $this->product->add($product);
-            $product->setStock($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): static
-    {
-        if ($this->product->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getStock() === $this) {
-                $product->setStock(null);
-            }
-        }
-
-        return $this;
-    }
-
+   
     public function getQuantity(): ?int
     {
         return $this->quantity;
