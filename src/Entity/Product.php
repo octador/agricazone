@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -17,17 +19,8 @@ class Product
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $description = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $price = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
     private ?string $picture = null;
 
-
-    #[ORM\Column(nullable: true)]
-    private ?bool $is_aivailable = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $created_at = null;
@@ -35,6 +28,19 @@ class Product
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Category $category = null;
+
+    /**
+     * @var Collection<int, Stock>
+     */
+    #[ORM\OneToMany(targetEntity: Stock::class, mappedBy: 'product')]
+    private Collection $stock;
+
+    public function __construct()
+    {
+        $this->stock = new ArrayCollection();
+    }
+
+   
 
     public function getId(): ?int
     {
@@ -53,30 +59,6 @@ class Product
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): static
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    public function getPrice(): ?int
-    {
-        return $this->price;
-    }
-
-    public function setPrice(?int $price): static
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
     public function getPicture(): ?string
     {
         return $this->picture;
@@ -90,17 +72,7 @@ class Product
     }
 
 
-    public function isAivailable(): ?bool
-    {
-        return $this->is_aivailable;
-    }
-
-    public function setAivailable(?bool $is_aivailable): static
-    {
-        $this->is_aivailable = $is_aivailable;
-
-        return $this;
-    }
+  
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
@@ -127,5 +99,34 @@ class Product
         return $this;
     }
 
-    
+    /**
+     * @return Collection<int, Stock>
+     */
+    public function getStock(): Collection
+    {
+        return $this->stock;
+    }
+
+    public function addStock(Stock $stock): static
+    {
+        if (!$this->stock->contains($stock)) {
+            $this->stock->add($stock);
+            $stock->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStock(Stock $stock): static
+    {
+        if ($this->stock->removeElement($stock)) {
+            // set the owning side to null (unless already changed)
+            if ($stock->getProduct() === $this) {
+                $stock->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+ 
 }

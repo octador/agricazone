@@ -18,17 +18,32 @@ class Stock
     #[ORM\ManyToOne(inversedBy: 'stocks')]
     private ?User $user = null;
 
-  
-    
-
     #[ORM\Column(nullable: true)]
     private ?int $quantity = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $created_at = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $price = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $is_available = null;
+
+    #[ORM\ManyToOne(inversedBy: 'stock')]
+    private ?Product $product = null;
+
+    /**
+     * @var Collection<int, Product>
+     */
+   
+
     public function __construct()
     {
+       
     }
 
     public function getId(): ?int
@@ -72,4 +87,54 @@ class Stock
 
         return $this;
     }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?int $price): static
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function isAvailable(): ?bool
+    {
+        return $this->is_available;
+    }
+
+    public function setAvailable(?bool $is_available): static
+    {
+        $this->is_available = $is_available;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Product $product): static
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
+
 }

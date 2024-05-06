@@ -14,7 +14,6 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils ,Request $request ): Response
     
     {
-
         $email = $request->query->get('email');
 
         // if ($this->getUser()) {

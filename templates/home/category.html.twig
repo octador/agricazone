@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello Category!{% endblock %}
+
+{% block body %}
+
+<div class="flex">
+{% for category in categories %}
+
+    <div class="flex-col">
+        <a href="{{ path('app_category_product', {'category': category.name})}}">
+            <img src="{{ asset('uploads/pictures/' ~ category.picture) }}" width="100px"/>
+            <h3 >{{ category.name }}</h3>
+        </a>
+    </div>
+{% endfor %}
+</div>
+
+
+<div class="flex ">
+    {% if products %}
+
+    <div class="product flex flex-col ">
+        {% for product in products %}
+
+        <a class="" href="{{ path('app_product_show', {'id': product.id})}}">
+
+            <img src="{{ asset('uploads/pictures/' ~ product.picture) }}" width="100"/>
+            <h2>{{ product.name }}</h2>
+        </a>
+        
+    </div>
+    {% endfor %}
+
+</div>
+{% endif %}
+
+{% endblock %}

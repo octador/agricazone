@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,6 +56,23 @@ class UserController extends AbstractController
     {
         return $this->render('user/show.html.twig', [
             'user' => $user,
+        ]);
+    }
+
+    #[Route('/admin/farmer/{id}', name: 'app_user_show_admin_farmer', methods: ['GET'])]
+    public function showAdmin(User $user,ProductRepository $productRepository ,CategoryRepository $categoryRepository): Response
+    {
+        // recupere tout les products et les afficher
+        // mettre un price et les rentrée en base de donnée
+        // mettre une description et la rentré en base de donnée
+        // ajouter le status
+        
+        $listProducts = $productRepository->findAll();
+        
+        
+        return $this->render('user/showAdminFarmer.html.twig', [
+            'user' => $user,
+            'listProducts' => $listProducts
         ]);
     }
 

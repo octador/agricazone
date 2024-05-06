@@ -15,12 +15,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
 
-    #[Route('/{category?}', name: 'home')]
+    #[Route('/', name: 'home')]
 
     public function index(Security $security, ProductRepository $productRepository, ?string $category,CategoryRepository $categoryRepository,StockRepository $stockRepository): Response
     {
         $user = $this->getUser();
-
+      
         /**
          * @var User $user
          */
@@ -28,6 +28,37 @@ class HomeController extends AbstractController
             $security->logout(false);
             return $this->redirectToRoute('verification_page');
         }
+
+        $categories = $categoryRepository->findAll();
+
+      
+       
+
+        return $this->render('home/index.html.twig', [
+            'categories' => $categories
+        ]);
+    }
+
+    #[Route('/verification', name: 'verification_page')]
+    public function verificationPage(): Response
+    {
+        $this->addFlash(
+            'warning',
+            'Veillez à vérifier votre compte avec votre boîte mail'
+        );
+        return $this->render('security/verif-mail.html.twig');
+    }
+
+    #[Route('/products/{category?}', name: 'app_category_product')]
+
+    public function category(ProductRepository $productRepository, ?string $category,CategoryRepository $categoryRepository,StockRepository $stockRepository): Response
+    {
+        $user = $this->getUser();
+      
+        /**
+         * @var User $user
+         */
+     
 
         $categories = $categoryRepository->findAll();
 
@@ -47,20 +78,10 @@ class HomeController extends AbstractController
         
        
 
-        return $this->render('home/index.html.twig', [
+        return $this->render('home/category.html.twig', [
             'products' => $products, 
             'categories' => $categories
         ]);
-    }
-
-    #[Route('/verification', name: 'verification_page')]
-    public function verificationPage(): Response
-    {
-        $this->addFlash(
-            'warning',
-            'Veillez à vérifier votre compte avec votre boîte mail'
-        );
-        return $this->render('security/verif-mail.html.twig');
     }
 
 }
