@@ -2,15 +2,24 @@
 {% block body %}
     
  <div class="flex flex-row ">
-  
-{% for listproduct in listProducts %}
-<a href="{{ path('app_category_product', {'id': listproduct.id})}}">
-        <img src="{{ asset('assets/image/logoproduct/' ~ listproduct.picture) }}" alt="product" />
-</a>
 
-        
-        
-{% endfor %} 
+ {{ form_start(formStock) }}
+     
+     {% for product in listProducts %}
+        <div>
+                <input type="radio" value="{{product.name}}" name="product" id="{{product.name}}">
+                <img src="{{asset('assets/image/logoproduct/' ~ product.picture)}}" alt="{{product.name}}" width="100px"/>
+        </div>
+     {% endfor %}
+ {{ form_end(formStock) }}
+ 
+
+
+{# {% for listproduct in listProducts %}
+<a href="{{ path('app_category_product', {'id': listproduct.id})}}">
+        <img src="{{ asset('assets/image/logoproduct/' ~ listproduct.picture) }}" alt="{{listproduct.name}}" />
+</a>
+{% endfor %}  #}
    
 </div>
 {% endblock %}

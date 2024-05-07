@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\Stock;
 use App\Entity\User;
+use App\Form\StockType;
 use App\Form\UserType;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
@@ -59,20 +61,48 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/farmer/{id}', name: 'app_user_show_admin_farmer', methods: ['GET'])]
-    public function showAdmin(User $user,ProductRepository $productRepository ,CategoryRepository $categoryRepository): Response
+    #[Route('/admin/farmer/{id}', name: 'app_user_show_admin_farmer', methods: ['GET', 'POST'])]
+    public function showAdmin(User $user,ProductRepository $productRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
         // recupere tout les products et les afficher
         // mettre un price et les rentrée en base de donnée
         // mettre une description et la rentré en base de donnée
         // ajouter le status
         
+        $stock = new Stock();
+        $stock->setCreatedAt(new \DateTimeImmutable());
+        $stock->setUser($user);
+
+        // dd($product->getPicture());
+
+        $formStock = $this->createForm(StockType::class, $stock);
+
+        $formStock->handleRequest($request);
+
+        if($formStock->isSubmitted() && $formStock->isValid()){
+            $productCategory = $request->request->all()['product'];
+
+            $product = $productRepository->findOneBy(['name' => $productCategory]);
+            
+            // is Available 
+            $stock->setProduct($product);
+
+           
+            $entityManager->persist($stock);
+            $entityManager->flush();
+
+        }
+        
+        
+
+        
         $listProducts = $productRepository->findAll();
         
         
         return $this->render('user/showAdminFarmer.html.twig', [
             'user' => $user,
-            'listProducts' => $listProducts
+            'listProducts' => $listProducts,
+            'formStock' => $formStock
         ]);
     }
 

@@ -31,7 +31,7 @@ class Stock
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $is_available = null;
+    private ?bool $is_available = false;
 
     #[ORM\ManyToOne(inversedBy: 'stock')]
     private ?Product $product = null;
@@ -112,7 +112,7 @@ class Stock
         return $this;
     }
 
-    public function isAvailable(): ?bool
+    public function getIsAvailable(): ?bool
     {
         return $this->is_available;
     }
