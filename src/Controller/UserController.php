@@ -62,44 +62,43 @@ class UserController extends AbstractController
     }
 
     #[Route('/admin/farmer/{id}', name: 'app_user_show_admin_farmer', methods: ['GET', 'POST'])]
-    public function showAdmin(User $user,ProductRepository $productRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function showAdmin(User $user,ProductRepository $productRepository ,Product $product, Request $request, EntityManagerInterface $entityManager): Response
     {
-        // recupere tout les products et les afficher
-        // mettre un price et les rentrée en base de donnée
-        // mettre une description et la rentré en base de donnée
+        
         // ajouter le status
         
         $stock = new Stock();
         $stock->setCreatedAt(new \DateTimeImmutable());
         $stock->setUser($user);
+        
 
-        // dd($product->getPicture());
 
         $formStock = $this->createForm(StockType::class, $stock);
 
         $formStock->handleRequest($request);
 
         if($formStock->isSubmitted() && $formStock->isValid()){
-            $productCategory = $request->request->all()['product'];
+
+        // dd($product);
+        $productCategory = $product->getName();
+            // $productCategory = $request->request->all()['product'];
 
             $product = $productRepository->findOneBy(['name' => $productCategory]);
             
             // is Available 
-            $stock->setProduct($product);
-
-           
+            $stock->setProduct($product);           
             $entityManager->persist($stock);
             $entityManager->flush();
-
+            return $this->redirectToRoute('app_point_collection_index', ['id' => $user->getId()]);
         }
         
-        
-
-        
+    
+        $listStocks = $entityManager->getRepository(Stock::class)->findBy(['user' => $user]);
         $listProducts = $productRepository->findAll();
-        
+      
         
         return $this->render('user/showAdminFarmer.html.twig', [
+            'listStocks' => $listStocks,
             'user' => $user,
             'listProducts' => $listProducts,
             'formStock' => $formStock

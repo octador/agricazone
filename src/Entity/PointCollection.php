@@ -37,6 +37,7 @@ class PointCollection
      * @var Collection<int, Date>
      */
     #[ORM\OneToMany(targetEntity: Date::class, mappedBy: 'point_collection')]
+
     private Collection $dates;
 
     public function __construct()

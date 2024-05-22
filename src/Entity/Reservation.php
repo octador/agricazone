@@ -20,7 +20,7 @@ class Reservation
     private ?Date $date = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $pruduct = null;
+    private ?string $product = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $created_at = null;
@@ -68,12 +68,12 @@ class Reservation
 
     public function getPruduct(): ?string
     {
-        return $this->pruduct;
+        return $this->product;
     }
 
     public function setPruduct(?string $pruduct): static
     {
-        $this->pruduct = $pruduct;
+        $this->product = $pruduct;
 
         return $this;
     }

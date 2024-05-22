@@ -1,25 +1,106 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    
- <div class="flex flex-row ">
 
- {{ form_start(formStock) }}
-     
-     {% for product in listProducts %}
-        <div>
-                <input type="radio" value="{{product.name}}" name="product" id="{{product.name}}">
-                <img src="{{asset('assets/image/logoproduct/' ~ product.picture)}}" alt="{{product.name}}" width="100px"/>
-        </div>
-     {% endfor %}
- {{ form_end(formStock) }}
- 
+{# <div class="row mx-auto my-auto">
+        <div id="recipeCarousel" class="carousel slide w-100" data-ride="carousel">
+            <div class="carousel-inner w-100" role="listbox">
+                <div class="carousel-item active">
+                <div class="col-md-4 d-flex">
 
+            {% for product in listProducts %}
+                                
+                        <div class="inline">
+                                <input type="radio" 
+                                display="none"
+                                value="{{ product.name }}" 
+                                name="product" 
+                                id="{{ product.name }}">
 
-{# {% for listproduct in listProducts %}
-<a href="{{ path('app_category_product', {'id': listproduct.id})}}">
-        <img src="{{ asset('assets/image/logoproduct/' ~ listproduct.picture) }}" alt="{{listproduct.name}}" />
-</a>
-{% endfor %}  #}
-   
+                                <label for="{{ product.name }}">
+                                    <img src="{{ asset('assets/image/logoproduct/' ~ product.picture) }}" 
+                                    alt="{{ product.name }}" 
+                                    width="100px"/>
+                                </label>
+
+                        </div>
+                                
+            {% endfor %}
+                    
 </div>
+                </div>
+               
+            </div>
+            <a class="carousel-control-prev w-auto" href="#recipeCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark border border-dark rounded-circle" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next w-auto" href="#recipeCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon bg-dark border border-dark rounded-circle" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div> #}
+
+<div class='container'>
+
+ 
+<div class=" mt-5">
+
+    {{ form_start(formStock) }}
+
+        <div class="products-container d-flex align-items-center">
+
+            {% for product in listProducts %}
+
+                <div class="inline justify-content-center">
+
+                    <input type="radio" 
+                    display="none"
+                    value="{{ product.name }}" 
+                    name="product" 
+                    id="{{ product.name }}">
+
+                    <label for="{{ product.name }}">
+                        <img src="{{ asset('assets/image/logoproduct/' ~ product.picture) }}" 
+                        alt="{{ product.name }}" 
+                        width="100px"/>
+                    </label>
+
+                </div>
+            {% endfor %}
+
+        </div>
+
+    {{ form_end(formStock) }}
+
+</div>
+        <table class="table mt-5">
+
+            <thead>
+                <tr>
+                    <th>Quantit&eacute;</th>
+                    <th>Produit</th>
+                    <th>Description</th>
+                    <th>Prix unitaire</th>
+                    <th>Point de collecte</th>
+                    <th>Action</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for stockProduit in listStocks %}
+                    <tr>
+                        <td>{{ stockProduit.quantity }}</td>
+                        <td>{{stockProduit.product.name}}</td>
+                        <td>{{ stockProduit.description }}</td>
+                        <td>{{ stockProduit.price }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</div> 
+
+
 {% endblock %}
